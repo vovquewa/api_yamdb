@@ -1,5 +1,8 @@
+import datetime
+
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.exceptions import ValidationError
 from django.db import models
 
 
@@ -46,6 +49,44 @@ class User(AbstractUser):
                 name="username_is_not_me"
             )
         ]
+
+
+class Genre(models.Model):
+    name = models.CharField(max_length=256)
+    slug = models.SlugField(max_length=50, unique=True)
+
+    class Meta:
+        ordering = ['name']
+
+
+class Categories(models.Model):
+    name = models.CharField(max_length=256)
+    slug = models.SlugField(max_length=50, unique=True)
+
+    class Meta:
+        ordering = ['name']
+
+
+class Tittle(models.Model):
+    name = models.CharField(max_length=256, unique=True)
+    year = models.IntegerField()
+    description = models.TextField(blank=True, null=True)
+    genre = models.ForeignKey(
+        Genre,
+        on_delete=models.CASCADE,
+        related_name='tittles'
+    )
+    category = models.ForeignKey(
+        Categories,
+        on_delete=models.CASCADE,
+        related_name='tittles'
+    )
+
+    def save(self, *args, **kwargs):
+        if self.year > datetime.date.today().year:
+            raise ValidationError('Нельзя добавлять произведения, которые еще не вышли.')
+        super(Tittle, self).save(*args, *kwargs)
+
 
 # vovq: ожидает модели Title
 
