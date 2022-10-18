@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from django.core.mail import send_mail
 from .permission import (IsAdmin,
                          IsAuthenticatedOrReadOnly,
@@ -16,6 +15,15 @@ from rest_framework import serializers
 from django.contrib.auth.tokens import default_token_generator
 from rest_framework.simplejwt.tokens import AssertToken
 from rest_framework import viewsets
+from rest_framework.pagination import LimitOffsetPagination
+from rest_framework import filters, viewsets
+from django_filters.rest_framework import DjangoFilterBackend
+
+
+from reviews.models import Categories, Genre, Title
+
+from .serializers import CategoriesSerializer, GenreSerializer, TittleSerializer
+
 
 
 @api_view(['POST'])
@@ -82,15 +90,6 @@ class UserViewSet(viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-=======
-from rest_framework.pagination import LimitOffsetPagination
-from rest_framework import filters, viewsets
-from django_filters.rest_framework import DjangoFilterBackend
-
-
-from reviews.models import Categories, Genre, Title
-
-from .serializers import CategoriesSerializer, GenreSerializer, TittleSerializer
 
 
 class CategoriesViewSet(viewsets.ModelViewSet):
@@ -115,4 +114,3 @@ class TittleViewSet(viewsets.ModelViewSet):
     pagination_class = LimitOffsetPagination
     filter_backends = (DjangoFilterBackend, )
     filterset_fields = ('category', 'genre', 'name', 'year')
->>>>>>> 38b3ea384d31124ed2d2c877415de7fd2dd18116

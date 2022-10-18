@@ -57,8 +57,6 @@ class User(AbstractUser):
             )
         ]
 
-<<<<<<< HEAD
-=======
 
 class Genre(models.Model):
     name = models.CharField(max_length=256)
@@ -146,4 +144,3 @@ class Comment(models.Model):
 
     def __str__(self) -> str:
         return self.text[:10]
->>>>>>> 38b3ea384d31124ed2d2c877415de7fd2dd18116
