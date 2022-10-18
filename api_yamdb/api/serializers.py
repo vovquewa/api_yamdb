@@ -66,3 +66,4 @@ class RegistraterUserSerializer(serializers.ModelSerializer):
 class TokenUserSerializer(serializers.ModelSerializer):
     username = serializers.CharField()
     confirmation_code = serializers.CharField()
+
