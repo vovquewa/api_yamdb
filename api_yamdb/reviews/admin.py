@@ -5,7 +5,6 @@ from .models import User, Title, Genre, Categories, Review, Comment
 admin.site.register(User)
 
 
-# vovq: ожидает Title
 class TitleAdmin(admin.ModelAdmin):
     list_display = ('pk', 'name', 'year', 'description', 'genre', 'category')
     search_fields = ('name', )
@@ -28,7 +27,7 @@ class CategoriesAdmin(admin.ModelAdmin):
 
 
 class RewiewAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'pub_date', 'author', 'text', 'score',)
+    list_display = ('pk', 'pub_date', 'author', 'text', 'score', 'title')
     search_fields = ('text',)
     list_filter = ('pub_date',)
     empty_value_display = '-пусто-'

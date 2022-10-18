@@ -100,13 +100,13 @@ class Review(models.Model):
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='reviews'
     )
-    # title = models.ForeignKey(
-    #     Title, on_delete=models.CASCADE, related_name='reviews'
-    # )
+    title = models.ForeignKey(
+        Title, on_delete=models.CASCADE, related_name='reviews'
+    )
 
     class Meta:
         ordering = ['-pub_date']
-        # unique_together = ('author', 'title')
+        unique_together = ('author', 'title')
 
     def __str__(self) -> str:
         return self.text[:10]
