@@ -1,10 +1,30 @@
 from django.contrib import admin
 
-from .models import User, Review, Comment
+from .models import User, Title, Genre, Categories, Review, Comment
 
 admin.site.register(User)
 
+
 # vovq: ожидает Title
+class TitleAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'name', 'year', 'description', 'genre', 'category')
+    search_fields = ('name', )
+    list_filter = ('name', )
+    empty_value_display = '-пусто-'
+
+
+class GenreAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'name', 'slug')
+    search_fields = ('name', )
+    list_filter = ('name', )
+    empty_value_display = '-пусто-'
+
+
+class CategoriesAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'name', 'slug')
+    search_fields = ('name',)
+    list_filter = ('name',)
+    empty_value_display = '-пусто-'
 
 
 class RewiewAdmin(admin.ModelAdmin):
@@ -25,3 +45,6 @@ class CommentAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Comment, CommentAdmin)
+admin.site.register(Title, TitleAdmin)
+admin.site.register(Categories, CategoriesAdmin)
+admin.site.register(Genre, GenreAdmin)
