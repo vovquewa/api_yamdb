@@ -103,9 +103,6 @@ class Title(models.Model):
         return self.name
 
 
-# vovq: ожидает модели Title
-
-
 class Review(models.Model):
     text = models.TextField()
     pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)

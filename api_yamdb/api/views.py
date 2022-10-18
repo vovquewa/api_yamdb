@@ -5,7 +5,9 @@ from .permission import (IsAdmin,
 from .serializers import (UserSerializer,
                           UserEditSerializer,
                           RegistraterUserSerializer,
-                          TokenUserSerializer)
+                          TokenUserSerializer,
+                          CommentSerializer,
+                          RewiewSerializer)
 from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.response import Response
 from rest_framework import status, permissions
@@ -14,13 +16,14 @@ from reviews.models import User
 from rest_framework import serializers
 from django.contrib.auth.tokens import default_token_generator
 from rest_framework_simplejwt.tokens import AccessToken
+from rest_framework.exceptions import ValidationError
 from rest_framework import viewsets
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework import filters, viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 
 
-from reviews.models import Categories, Genre, Title
+from reviews.models import Categories, Genre, Title, Review, Comment
 
 from .serializers import CategoriesSerializer, GenreSerializer, TittleSerializer
 
@@ -114,3 +117,20 @@ class TittleViewSet(viewsets.ModelViewSet):
     pagination_class = LimitOffsetPagination
     filter_backends = (DjangoFilterBackend, )
     filterset_fields = ('category', 'genre', 'name', 'year')
+
+
+class ReviewViewset(viewsets.ModelViewSet):
+    serializer_class = RewiewSerializer
+    pagination_class = LimitOffsetPagination
+
+    def get_queryset(self):
+        title = get_object_or_404(Title, id=self.kwargs.get('title_id'))
+        review_queryset = title.reviews.all()
+        return review_queryset
+
+    def perform_create(self, serializer):
+        title = get_object_or_404(Title, id=self.kwargs.get('title_id'))
+        author = self.request.user
+        if Review.objects.filter(title=title, author=author).exists():
+            raise ValidationError('Возможен только один отзыв для автора')
+        serializer.save(author=author, title=title)

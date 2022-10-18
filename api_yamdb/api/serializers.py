@@ -2,7 +2,7 @@ from rest_framework import serializers
 from reviews.models import User
 from rest_framework.validators import UniqueTogetherValidator, UniqueValidator
 from rest_framework.relations import SlugRelatedField
-from reviews.models import Genre, Categories, Title
+from reviews.models import Genre, Categories, Title, Comment, Review
 
 class UserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(max_length=254)
@@ -91,3 +91,27 @@ class TittleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Title
         fields = ('id', 'name', 'year', 'description', 'genre', 'category')
+
+
+class RewiewSerializer(serializers.ModelSerializer):
+
+    author = serializers.SlugRelatedField(
+        slug_field='username',
+        read_only=True
+    )
+
+    class Meta:
+        model = Review
+        fields = ('id', 'text', 'author', 'score', 'pub_date')
+
+
+class CommentSerializer(serializers.ModelSerializer):
+
+    author = serializers.SlugRelatedField(
+        slug_field='username',
+        read_only=True
+    )
+
+    class Meta:
+        model = Comment
+        fields = ('id', 'created', 'text', 'author', 'review')
