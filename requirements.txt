@@ -1,9 +1,16 @@
 requests==2.26.0
 django==2.2.16
-django-filter
+django-filter==2.3.0
 djangorestframework==3.12.4
+<<<<<<< HEAD
 pytest==6.2.4
 pytest-django==4.4.0
 pytest-pythonpath==0.7.3
 PyJWT==2.1.0
-djangorestframework-simplejwt
+djangorestframework-simplejwt==4.7.2
+PyJWT==2.1.0
+pytest==6.2.4
+pytest-django==4.4.0
+pytest-pythonpath==0.7.3
+
+>>>>>>> 03eee44fc2bc703f3a45122d8d28bcda927b0688
