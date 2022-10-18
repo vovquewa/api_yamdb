@@ -67,7 +67,7 @@ class Categories(models.Model):
         ordering = ['name']
 
 
-class Tittle(models.Model):
+class Title(models.Model):
     name = models.CharField(max_length=256, unique=True)
     year = models.IntegerField()
     description = models.TextField(blank=True, null=True)
@@ -85,7 +85,7 @@ class Tittle(models.Model):
     def save(self, *args, **kwargs):
         if self.year > datetime.date.today().year:
             raise ValidationError('Нельзя добавлять произведения, которые еще не вышли.')
-        super(Tittle, self).save(*args, *kwargs)
+        super(Title, self).save(*args, *kwargs)
 
 
 # vovq: ожидает модели Title
