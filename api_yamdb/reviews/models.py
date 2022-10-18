@@ -58,6 +58,9 @@ class Genre(models.Model):
     class Meta:
         ordering = ['name']
 
+    def __str__(self):
+        return self.name
+
 
 class Categories(models.Model):
     name = models.CharField(max_length=256)
@@ -66,14 +69,16 @@ class Categories(models.Model):
     class Meta:
         ordering = ['name']
 
+    def __str__(self):
+        return self.name
+
 
 class Title(models.Model):
     name = models.CharField(max_length=256, unique=True)
     year = models.IntegerField()
     description = models.TextField(blank=True, null=True)
-    genre = models.ForeignKey(
+    genre = models.ManyToManyField(
         Genre,
-        on_delete=models.CASCADE,
         related_name='tittles'
     )
     category = models.ForeignKey(
@@ -86,6 +91,9 @@ class Title(models.Model):
         if self.year > datetime.date.today().year:
             raise ValidationError('Нельзя добавлять произведения, которые еще не вышли.')
         super(Title, self).save(*args, *kwargs)
+
+    def __str__(self):
+        return self.name
 
 
 # vovq: ожидает модели Title

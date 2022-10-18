@@ -6,7 +6,7 @@ admin.site.register(User)
 
 
 class TitleAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'name', 'year', 'description', 'genre', 'category')
+    list_display = ('pk', 'name', 'year', 'description', 'category')
     search_fields = ('name', )
     list_filter = ('name', )
     empty_value_display = '-пусто-'
