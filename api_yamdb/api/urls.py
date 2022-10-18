@@ -1,5 +1,4 @@
 from django.urls import include, path
-<<<<<<< HEAD
 from rest_framework.routers import DefaultRouter
 from .views import UserViewSet, register, get_jwt_token
 from .views import CategoriesViewSet, GenreViewSet, TittleViewSet
@@ -15,4 +14,3 @@ urlpatterns = [
     path('v1/auth/signup/', register, basename='register'),
     path('v1/auth/token/', get_jwt_token, basename='token'),
 ]
-
