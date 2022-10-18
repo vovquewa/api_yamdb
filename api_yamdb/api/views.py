@@ -13,7 +13,7 @@ from django.shortcuts import get_object_or_404
 from reviews.models import User
 from rest_framework import serializers
 from django.contrib.auth.tokens import default_token_generator
-from rest_framework.simplejwt.tokens import AssertToken
+from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework import viewsets
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework import filters, viewsets
@@ -57,7 +57,7 @@ def get_jwt_token(request):
     if default_token_generator.check_token(
         user.serializer.validated_data['confirmation_code']
     ):
-        token = AssertToken.for_user(user)
+        token = AccessToken.for_user(user)
         return Response({'token': str(token)}, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

@@ -11,6 +11,6 @@ v1_router.register('titles', TittleViewSet)
 
 urlpatterns = [
     path('v1/', include(v1_router.urls)),
-    path('v1/auth/signup/', register, basename='register'),
-    path('v1/auth/token/', get_jwt_token, basename='token'),
+    path('v1/auth/signup/', register, name='register'),
+    path('v1/auth/token/', get_jwt_token, name='token'),
 ]
