@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 
@@ -45,3 +46,45 @@ class User(AbstractUser):
                 name="username_is_not_me"
             )
         ]
+
+# vovq: ожидает модели Title
+
+
+class Review(models.Model):
+    text = models.TextField()
+    pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
+    score = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(10)]
+    )
+    author = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='reviews'
+    )
+    # title = models.ForeignKey(
+    #     Title, on_delete=models.CASCADE, related_name='reviews'
+    # )
+
+    class Meta:
+        ordering = ['-pub_date']
+        # unique_together = ('author', 'title')
+
+    def __str__(self) -> str:
+        return self.text[:10]
+
+
+class Comment(models.Model):
+    text = models.TextField()
+    created = models.DateTimeField(
+        'Дата добавления', auto_now_add=True
+    )
+    author = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='comments'
+    )
+    review = models.ForeignKey(
+        Review, on_delete=models.CASCADE, related_name='comments'
+    )
+
+    class Meta:
+        ordering = ['-created']
+
+    def __str__(self) -> str:
+        return self.text[:10]
