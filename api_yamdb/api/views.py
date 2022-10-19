@@ -1,7 +1,8 @@
 from django.core.mail import send_mail
 from .permissions import (IsAdmin,
-                         IsAuthenticatedOrReadOnly,
-                         IsModeratorIsOwnerOrReadOnly)
+                          IsAdminOrReadOnly,
+                          IsAuthenticatedOrReadOnly,
+                          IsModeratorIsOwnerOrReadOnly,)
 from .serializers import (UserSerializer,
                           UserEditSerializer,
                           RegistraterUserSerializer,
@@ -10,6 +11,7 @@ from .serializers import (UserSerializer,
                           RewiewSerializer,
                           CategoriesSerializer,
                           GenreSerializer,
+                          ReadTittleSerializer,
                           TittleSerializer)
 from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.response import Response
@@ -93,27 +95,34 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 class CategoriesViewSet(viewsets.ModelViewSet):
+    lookup_field = 'slug'
     queryset = Categories.objects.all()
+    permission_classes = (IsAdminOrReadOnly,)
     serializer_class = CategoriesSerializer
-    pagination_class = LimitOffsetPagination
     filter_backends = (filters.SearchFilter,)
     search_field = ('name', )
 
 
 class GenreViewSet(viewsets.ModelViewSet):
+    lookup_field = 'slug'
     queryset = Genre.objects.all()
+    permission_classes = (IsAdminOrReadOnly,)
     serializer_class = GenreSerializer
-    pagination_class = LimitOffsetPagination
     filter_backends = (filters.SearchFilter,)
     search_field = ('name',)
 
 
 class TittleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
-    serializer_class = TittleSerializer
-    pagination_class = LimitOffsetPagination
+    permission_classes = (IsAdminOrReadOnly,)
+    serializer_class = ReadTittleSerializer
     filter_backends = (DjangoFilterBackend, )
     filterset_fields = ('category', 'genre', 'name', 'year')
+
+    def get_serializer_class(self):
+        if self.action in ('list', 'retrieve'):
+            return ReadTittleSerializer
+        return TittleSerializer
 
 
 class ReviewViewset(viewsets.ModelViewSet):
