@@ -1,5 +1,5 @@
 from django.core.mail import send_mail
-from .permission import (IsAdmin,
+from .permissions import (IsAdmin,
                          IsAuthenticatedOrReadOnly,
                          IsModeratorIsOwnerOrReadOnly)
 from .serializers import (UserSerializer,
