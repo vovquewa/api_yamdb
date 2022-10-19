@@ -111,7 +111,7 @@ class GenreViewSet(viewsets.ModelViewSet):
     search_field = ('name',)
 
 
-class TittleViewSet(viewsets.ModelViewSet):
+class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
     permission_classes = (IsAdminOrReadOnly,)
     serializer_class = ReadTittleSerializer

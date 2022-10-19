@@ -1,13 +1,13 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 from .views import UserViewSet, register, get_jwt_token
-from .views import CategoriesViewSet, GenreViewSet, TittleViewSet, ReviewViewset, CommentViewset
+from .views import CategoriesViewSet, GenreViewSet, TitleViewSet, ReviewViewset, CommentViewset
 v1_router = DefaultRouter()
 
 v1_router.register('users', UserViewSet)
 v1_router.register('categories', CategoriesViewSet)
 v1_router.register('genres', GenreViewSet)
-v1_router.register('titles', TittleViewSet)
+v1_router.register('titles', TitleViewSet)
 v1_router.register(
     r'titles/(?P<title_id>\d+)/reviews',
     ReviewViewset,
