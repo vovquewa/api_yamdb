@@ -1,6 +1,6 @@
 from django.core.mail import send_mail
 from .permissions import (IsAdmin,
-                         IsAuthenticatedOrReadOnly,
+                         IsAdminOrReadOnly,
                          IsModeratorIsOwnerOrReadOnly)
 from .serializers import (UserSerializer,
                           UserEditSerializer,
@@ -95,6 +95,7 @@ class UserViewSet(viewsets.ModelViewSet):
 class CategoriesViewSet(viewsets.ModelViewSet):
     queryset = Categories.objects.all()
     serializer_class = CategoriesSerializer
+    permission_classes = [IsAdminOrReadOnly]
     pagination_class = LimitOffsetPagination
     filter_backends = (filters.SearchFilter,)
     search_field = ('name', )
@@ -103,6 +104,7 @@ class CategoriesViewSet(viewsets.ModelViewSet):
 class GenreViewSet(viewsets.ModelViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
+    permission_classes = [IsAdminOrReadOnly]
     pagination_class = LimitOffsetPagination
     filter_backends = (filters.SearchFilter,)
     search_field = ('name',)
@@ -111,6 +113,7 @@ class GenreViewSet(viewsets.ModelViewSet):
 class TittleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
     serializer_class = TittleSerializer
+    permission_classes = [IsAdminOrReadOnly]
     pagination_class = LimitOffsetPagination
     filter_backends = (DjangoFilterBackend, )
     filterset_fields = ('category', 'genre', 'name', 'year')
@@ -118,6 +121,7 @@ class TittleViewSet(viewsets.ModelViewSet):
 
 class ReviewViewset(viewsets.ModelViewSet):
     serializer_class = RewiewSerializer
+    permission_classes = [IsModeratorIsOwnerOrReadOnly]
     pagination_class = LimitOffsetPagination
 
     def get_queryset(self):
@@ -138,6 +142,7 @@ class ReviewViewset(viewsets.ModelViewSet):
 
 class CommentViewset(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
+    permission_classes = [IsModeratorIsOwnerOrReadOnly]
     pagination_class = LimitOffsetPagination
 
     def get_queryset(self):
