@@ -122,7 +122,7 @@ class TittleViewSet(viewsets.ModelViewSet):
 @permission_classes([permissions.AllowAny])
 class ReviewViewset(viewsets.ModelViewSet):
     serializer_class = RewiewSerializer
-    pagination_class = LimitOffsetPagination
+    # pagination_class = PageNumberPagination
     # permission_classes = permissions.AllowAny
 
     def get_queryset(self):
@@ -140,10 +140,10 @@ class ReviewViewset(viewsets.ModelViewSet):
             raise ValidationError('Возможен только один отзыв для автора')
         serializer.save(author=author, title=title)
 
-
+@permission_classes([permissions.AllowAny])
 class CommentViewset(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
-    pagination_class = LimitOffsetPagination
+    # pagination_class = LimitOffsetPagination
     # permission_classes = permissions.AllowAny
 
     def get_queryset(self):
