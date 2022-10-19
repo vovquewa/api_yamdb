@@ -1,29 +1,36 @@
 from rest_framework import serializers
 from reviews.models import User
-from rest_framework.validators import UniqueTogetherValidator, UniqueValidator
+from rest_framework.validators import UniqueValidator
 from rest_framework.relations import SlugRelatedField
 from reviews.models import Genre, Categories, Title, Comment, Review
 
+
 class UserSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(max_length=254)
-    username = serializers.CharField(max_length=150)
+    email = serializers.EmailField(
+        validators=[
+            UniqueValidator(
+                queryset=User.objects.all())
+                ],
+        required=True,
+    )
+    username = serializers.CharField(
+        validators=[
+            UniqueValidator(
+                queryset=User.objects.all())
+        ],
+        required=True,
+    )
 
     class Meta:
         model = User
-        fields = '__all__'
-        validators = [
-            UniqueTogetherValidator(
-                queryset=User.objects.all(),
-                fields=(
-                    'username',
-                    'first_name',
-                    'last_name',
-                    'email',
-                    'role',
-                    'bio'
+        fields=(
+                'username',
+                'first_name',
+                'last_name',
+                'email',
+                'role',
+                'bio'
                 )
-            )
-        ]
 
 
 class UserEditSerializer(serializers.ModelSerializer):
@@ -64,10 +71,9 @@ class RegistraterUserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('username', 'email')
 
-class TokenUserSerializer(serializers.ModelSerializer):
+class TokenUserSerializer(serializers.Serializer):
     username = serializers.CharField()
     confirmation_code = serializers.CharField()
-
 
 
 class GenreSerializer(serializers.ModelSerializer):

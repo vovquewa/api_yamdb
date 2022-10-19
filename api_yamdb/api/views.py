@@ -7,58 +7,55 @@ from .serializers import (UserSerializer,
                           RegistraterUserSerializer,
                           TokenUserSerializer,
                           CommentSerializer,
-                          RewiewSerializer)
+                          RewiewSerializer,
+                          CategoriesSerializer,
+                          GenreSerializer,
+                          TittleSerializer)
 from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.response import Response
-from rest_framework import status, permissions
 from django.shortcuts import get_object_or_404
-from reviews.models import User
 from rest_framework import serializers
 from django.contrib.auth.tokens import default_token_generator
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework.exceptions import ValidationError
-from rest_framework import viewsets
 from rest_framework.pagination import LimitOffsetPagination
-from rest_framework import filters, viewsets
+from rest_framework import filters, viewsets, status, permissions
 from django_filters.rest_framework import DjangoFilterBackend
-
-
-from reviews.models import Categories, Genre, Title, Review, Comment
-
-from .serializers import CategoriesSerializer, GenreSerializer, TittleSerializer
-
+from reviews.models import Categories, Genre, Title, Review, Comment, User
 
 
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 def register(request):
-    serialized = RegistraterUserSerializer(data=request.data)
-    if serialized.is_valid():
-        serialized.save()
-        user = get_object_or_404(
-            User, useername=serializers.validated_data['username']
-        )
-        confirmation_code = default_token_generator.make_token(user)
+    serializer = RegistraterUserSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    user = get_object_or_404(
+        User, username=serializer.validated_data['username']
+    )
+    confirmation_code = default_token_generator.make_token(user)
     send_mail(
         subject='Регистрация',
-        message=f'Ваш токен {confirmation_code}',
+        message=f'Токен для пользователя {user}: {confirmation_code}',
         from_email=None,
         recipient_list=[user.email],
         fail_silently=False
     )
-    return Response(serializers.data, status=status.HTTP_200_OK)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 def get_jwt_token(request):
     serializer=TokenUserSerializer(data=request.data)
-    serializer.is_valid()
+    serializer.is_valid(raise_exception=True)
     user = get_object_or_404(
-            User, useername=serializers.validated_data['username']
+            User,
+        username=serializer.validated_data['username']
         )
     if default_token_generator.check_token(
-        user.serializer.validated_data['confirmation_code']
+        user,
+            serializer.validated_data['confirmation_code']
     ):
         token = AccessToken.for_user(user)
         return Response({'token': str(token)}, status=status.HTTP_200_OK)
@@ -89,7 +86,7 @@ class UserViewSet(viewsets.ModelViewSet):
                 data=request.data,
                 partial=True
             )
-            serializer.is_valid()
+            serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)

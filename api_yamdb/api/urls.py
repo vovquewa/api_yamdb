@@ -4,7 +4,7 @@ from .views import UserViewSet, register, get_jwt_token
 from .views import CategoriesViewSet, GenreViewSet, TittleViewSet
 v1_router = DefaultRouter()
 
-v1_router.register(r'users', UserViewSet)
+v1_router.register('users', UserViewSet)
 v1_router.register('categories', CategoriesViewSet)
 v1_router.register('genres', GenreViewSet)
 v1_router.register('titles', TittleViewSet)
