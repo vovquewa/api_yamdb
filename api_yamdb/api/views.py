@@ -1,8 +1,7 @@
 from django.core.mail import send_mail
 from .permissions import (IsAdmin,
-                          IsAdminOrReadOnly,
-                          IsAuthenticatedOrReadOnly,
-                          IsModeratorIsOwnerOrReadOnly,)
+                         IsAdminOrReadOnly,
+                         IsModeratorIsOwnerOrReadOnly)
 from .serializers import (UserSerializer,
                           UserEditSerializer,
                           RegistraterUserSerializer,
@@ -127,6 +126,7 @@ class TittleViewSet(viewsets.ModelViewSet):
 
 class ReviewViewset(viewsets.ModelViewSet):
     serializer_class = RewiewSerializer
+    permission_classes = [IsModeratorIsOwnerOrReadOnly]
     pagination_class = LimitOffsetPagination
 
     def get_queryset(self):
@@ -147,6 +147,7 @@ class ReviewViewset(viewsets.ModelViewSet):
 
 class CommentViewset(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
+    permission_classes = [IsModeratorIsOwnerOrReadOnly]
     pagination_class = LimitOffsetPagination
 
     def get_queryset(self):
