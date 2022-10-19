@@ -37,9 +37,9 @@ admin.site.register(Review, RewiewAdmin)
 
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'created', 'author', 'text', 'review')
+    list_display = ('pk', 'pub_date', 'author', 'text', 'review')
     search_fields = ('text',)
-    list_filter = ('created',)
+    list_filter = ('pub_date',)
     empty_value_display = '-пусто-'
 
 
