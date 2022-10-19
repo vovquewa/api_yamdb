@@ -90,13 +90,33 @@ class CategoriesSerializer(serializers.ModelSerializer):
         fields = ('name', 'slug')
 
 
-class TittleSerializer(serializers.ModelSerializer):
-    genre = SlugRelatedField(slug_field='slug', read_only=True, many=True)
-    category = SlugRelatedField(slug_field='slug', read_only=True)
+class ReadTittleSerializer(serializers.ModelSerializer):
+    genre = GenreSerializer(many=True)
+    category = CategoriesSerializer()
+    rating = serializers.SerializerMethodField('get_rating')
 
     class Meta:
         model = Title
-        fields = ('id', 'name', 'year', 'description', 'genre', 'category')
+        fields = ('id', 'name', 'year', 'rating', 'description', 'genre', 'category')
+
+    def get_rating(self, data):
+        reviews = Review.objects.filter(title=data)
+        result = 0
+        for i in reviews:
+            result += i.score
+        try:
+            return result/len(reviews)
+        except ZeroDivisionError:
+            return 0
+
+
+class TittleSerializer(serializers.ModelSerializer):
+    genre = SlugRelatedField(slug_field='slug', queryset=Genre.objects.all(), many=True)
+    category = SlugRelatedField(slug_field='slug', queryset=Categories.objects.all())
+
+    class Meta:
+        model = Title
+        fields = ('name', 'year', 'description', 'genre', 'category')
 
 
 class RewiewSerializer(serializers.ModelSerializer):

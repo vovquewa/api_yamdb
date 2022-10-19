@@ -1,9 +1,8 @@
-import datetime
 
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django.core.exceptions import ValidationError
 from django.db import models
+from .validations import time_validation
 
 
 class User(AbstractUser):
@@ -82,7 +81,7 @@ class Categories(models.Model):
 
 class Title(models.Model):
     name = models.CharField(max_length=256, unique=True)
-    year = models.IntegerField()
+    year = models.IntegerField(validators=[time_validation])
     description = models.TextField(blank=True, null=True)
     genre = models.ManyToManyField(
         Genre,
@@ -93,11 +92,6 @@ class Title(models.Model):
         on_delete=models.CASCADE,
         related_name='tittles'
     )
-
-    def save(self, *args, **kwargs):
-        if self.year > datetime.date.today().year:
-            raise ValidationError('Нельзя добавлять произведения, которые еще не вышли.')
-        super(Title, self).save(*args, *kwargs)
 
     def __str__(self):
         return self.name
