@@ -95,6 +95,8 @@ class Title(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ['-id']
 
 class Review(models.Model):
     text = models.TextField()
