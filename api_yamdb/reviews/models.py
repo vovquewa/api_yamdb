@@ -1,4 +1,3 @@
-
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
@@ -10,13 +9,13 @@ class User(AbstractUser):
     MODERATOR = 'moderator'
     ADMIN = 'admin'
     ROLE_CHOICES = (
-        ('USER', 'user'),
-        ('MODERATOR', 'moderator'),
-        ('ADMIN', 'admin'),
+        (USER, 'USER'),
+        (MODERATOR, 'MODERATOR'),
+        (ADMIN, 'ADMIN'),
     )
     role = models.CharField(
         max_length=10,
-        choices= ROLE_CHOICES,
+        choices = ROLE_CHOICES,
         default=USER
     )
     email = models.EmailField(
