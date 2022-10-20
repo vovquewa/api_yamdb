@@ -87,7 +87,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(
         detail=False,
-        methods=['get', 'patch'],
+        methods=["get", "patch"],
         url_path = 'me',
         permission_classes=[permissions.IsAuthenticated],
         serializer_class=UserEditSerializer,

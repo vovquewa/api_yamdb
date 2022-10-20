@@ -10,8 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
         validators=[
             UniqueValidator(
                 queryset=User.objects.all())
-                ],
-        required=True,
+                ]
     )
     username = serializers.CharField(
         validators=[
@@ -23,7 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields=(
+        fields = (
                 'username',
                 'first_name',
                 'last_name',
@@ -46,6 +45,7 @@ class UserEditSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ('role',)
 
+
 class RegistraterUserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
         validators=[
@@ -62,6 +62,7 @@ class RegistraterUserSerializer(serializers.ModelSerializer):
         ]
     )
 
+
     def validate_username(self, value):
         if value.lower() == 'me':
             raise serializers.ValidationError('Username "me" is not valid')
@@ -70,6 +71,7 @@ class RegistraterUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username', 'email')
+
 
 class TokenUserSerializer(serializers.Serializer):
     username = serializers.CharField()
