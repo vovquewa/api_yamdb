@@ -126,6 +126,7 @@ class GenreViewSet(CreateListDeleteViewSet):
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
 
+    
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
     permission_classes = (IsAdminOrReadOnly,)
