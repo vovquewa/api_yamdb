@@ -115,7 +115,7 @@ class CategoriesViewSet(CreateListDeleteViewSet):
     permission_classes = (IsAdminOrReadOnly,)
     serializer_class = CategoriesSerializer
     filter_backends = (filters.SearchFilter,)
-    search_fields = ('=name', )
+    search_fields = ('name', )
 
 
 class GenreViewSet(CreateListDeleteViewSet):
@@ -124,7 +124,7 @@ class GenreViewSet(CreateListDeleteViewSet):
     permission_classes = (IsAdminOrReadOnly,)
     serializer_class = GenreSerializer
     filter_backends = (filters.SearchFilter,)
-
+    search_fields = ('=name',)
 
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
