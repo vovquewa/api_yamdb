@@ -107,7 +107,7 @@ class ReadTittleSerializer(serializers.ModelSerializer):
         try:
             return result/len(reviews)
         except ZeroDivisionError:
-            return 0
+            return None
 
 
 class TittleSerializer(serializers.ModelSerializer):
@@ -116,7 +116,7 @@ class TittleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Title
-        fields = ('name', 'year', 'description', 'genre', 'category')
+        fields = ('id', 'name', 'year', 'description', 'genre', 'category')
 
 
 class RewiewSerializer(serializers.ModelSerializer):

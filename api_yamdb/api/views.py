@@ -1,3 +1,4 @@
+import django_filters
 from django.core.mail import send_mail
 from .permissions import (IsAdmin,
                          IsAdminOrReadOnly,
@@ -20,9 +21,24 @@ from django.contrib.auth.tokens import default_token_generator
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework.exceptions import ValidationError
 from rest_framework.pagination import LimitOffsetPagination
-from rest_framework import filters, viewsets, status, permissions
-from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, mixins, viewsets, status, permissions
+from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from reviews.models import Categories, Genre, Title, Review, Comment, User
+
+
+class CreateListDeleteViewSet(mixins.ListModelMixin, mixins.CreateModelMixin,
+                              mixins.DestroyModelMixin, viewsets.GenericViewSet):
+    pass
+
+
+class TitleFilter(FilterSet):
+    category = django_filters.CharFilter(field_name='category__slug')
+    genre = django_filters.CharFilter(field_name='genre__slug')
+    name = django_filters.CharFilter(lookup_expr='contains')
+
+    class Meta:
+        model = Title
+        fields = ('category', 'genre', 'name', 'year')
 
 
 @api_view(['POST'])
@@ -93,30 +109,29 @@ class UserViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
-class CategoriesViewSet(viewsets.ModelViewSet):
+class CategoriesViewSet(CreateListDeleteViewSet):
     lookup_field = 'slug'
     queryset = Categories.objects.all()
     permission_classes = (IsAdminOrReadOnly,)
     serializer_class = CategoriesSerializer
     filter_backends = (filters.SearchFilter,)
-    search_field = ('name', )
+    search_fields = ('=name', )
 
 
-class GenreViewSet(viewsets.ModelViewSet):
+class GenreViewSet(CreateListDeleteViewSet):
     lookup_field = 'slug'
     queryset = Genre.objects.all()
     permission_classes = (IsAdminOrReadOnly,)
     serializer_class = GenreSerializer
     filter_backends = (filters.SearchFilter,)
-    search_field = ('name',)
 
 
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
     permission_classes = (IsAdminOrReadOnly,)
     serializer_class = ReadTittleSerializer
-    filter_backends = (DjangoFilterBackend, )
-    filterset_fields = ('category', 'genre', 'name', 'year')
+    filter_backends = (DjangoFilterBackend,)
+    filter_class = TitleFilter
 
     def get_serializer_class(self):
         if self.action in ('list', 'retrieve'):
