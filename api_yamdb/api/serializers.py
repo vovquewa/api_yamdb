@@ -10,7 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
         validators=[
             UniqueValidator(
                 queryset=User.objects.all())
-                ]
+        ]
     )
     username = serializers.CharField(
         validators=[
@@ -23,19 +23,19 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
-                'username',
-                'first_name',
-                'last_name',
-                'email',
-                'role',
-                'bio'
-                )
+            'username',
+            'first_name',
+            'last_name',
+            'email',
+            'role',
+            'bio'
+        )
 
 
 class UserEditSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields=(
+        fields = (
             'username',
             'first_name',
             'last_name',
@@ -61,7 +61,6 @@ class RegistraterUserSerializer(serializers.ModelSerializer):
             )
         ]
     )
-
 
     def validate_username(self, value):
         if value.lower() == 'me':
@@ -99,7 +98,15 @@ class ReadTittleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Title
-        fields = ('id', 'name', 'year', 'rating', 'description', 'genre', 'category')
+        fields = (
+            'id',
+            'name',
+            'year',
+            'rating',
+            'description',
+            'genre',
+            'category',
+        )
 
     def get_rating(self, data):
         reviews = Review.objects.filter(title=data)
@@ -107,14 +114,18 @@ class ReadTittleSerializer(serializers.ModelSerializer):
         for i in reviews:
             result += i.score
         try:
-            return result/len(reviews)
+            return result / len(reviews)
         except ZeroDivisionError:
             return None
 
 
 class TittleSerializer(serializers.ModelSerializer):
-    genre = SlugRelatedField(slug_field='slug', queryset=Genre.objects.all(), many=True)
-    category = SlugRelatedField(slug_field='slug', queryset=Categories.objects.all())
+    genre = SlugRelatedField(
+        slug_field='slug', queryset=Genre.objects.all(), many=True
+    )
+    category = SlugRelatedField(
+        slug_field='slug', queryset=Categories.objects.all()
+    )
 
     class Meta:
         model = Title

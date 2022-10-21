@@ -1,8 +1,10 @@
 import django_filters
 from django.core.mail import send_mail
-from .permissions import (IsAdmin,
-                         IsAdminOrReadOnly,
-                         IsModeratorIsOwnerOrReadOnly)
+from .permissions import (
+    IsAdmin,
+    IsAdminOrReadOnly,
+    IsModeratorIsOwnerOrReadOnly
+)
 from .serializers import (UserSerializer,
                           UserEditSerializer,
                           RegistraterUserSerializer,
@@ -16,18 +18,19 @@ from .serializers import (UserSerializer,
 from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
-from rest_framework import serializers
 from django.contrib.auth.tokens import default_token_generator
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework.exceptions import ValidationError
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework import filters, mixins, viewsets, status, permissions
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
-from reviews.models import Categories, Genre, Title, Review, Comment, User
+from reviews.models import Categories, Genre, Title, Review, User
 
 
-class CreateListDeleteViewSet(mixins.ListModelMixin, mixins.CreateModelMixin,
-                              mixins.DestroyModelMixin, viewsets.GenericViewSet):
+class CreateListDeleteViewSet(mixins.ListModelMixin,
+                              mixins.CreateModelMixin,
+                              mixins.DestroyModelMixin,
+                              viewsets.GenericViewSet):
     pass
 
 
@@ -64,12 +67,12 @@ def register(request):
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 def get_jwt_token(request):
-    serializer=TokenUserSerializer(data=request.data)
+    serializer = TokenUserSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     user = get_object_or_404(
-            User,
+        User,
         username=serializer.validated_data['username']
-        )
+    )
     if default_token_generator.check_token(
         user,
             serializer.validated_data['confirmation_code']
@@ -88,7 +91,7 @@ class UserViewSet(viewsets.ModelViewSet):
     @action(
         detail=False,
         methods=["get", "patch"],
-        url_path = 'me',
+        url_path='me',
         permission_classes=[permissions.IsAuthenticated],
         serializer_class=UserEditSerializer,
     )
@@ -126,7 +129,7 @@ class GenreViewSet(CreateListDeleteViewSet):
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
 
-    
+
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
     permission_classes = (IsAdminOrReadOnly,)

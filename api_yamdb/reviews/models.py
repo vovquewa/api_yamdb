@@ -15,7 +15,7 @@ class User(AbstractUser):
     )
     role = models.CharField(
         max_length=10,
-        choices = ROLE_CHOICES,
+        choices=ROLE_CHOICES,
         default=USER
     )
     email = models.EmailField(
@@ -45,7 +45,7 @@ class User(AbstractUser):
         return self.role == self.MODERATOR
 
     class Meta:
-        ordering= ['id']
+        ordering = ['id']
         constraints = [
             models.CheckConstraint(
                 check=~models.Q(
@@ -97,6 +97,7 @@ class Title(models.Model):
 
     class Meta:
         ordering = ['-id']
+
 
 class Review(models.Model):
     text = models.TextField()
