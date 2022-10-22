@@ -96,7 +96,7 @@ class CategoriesSerializer(serializers.ModelSerializer):
 class ReadTittleSerializer(serializers.ModelSerializer):
     genre = GenreSerializer(many=True)
     category = CategoriesSerializer()
-    rating = serializers.SerializerMethodField('get_rating')
+    rating = serializers.IntegerField()
 
     class Meta:
         model = Title
@@ -109,16 +109,6 @@ class ReadTittleSerializer(serializers.ModelSerializer):
             'genre',
             'category',
         )
-
-    def get_rating(self, data):
-        reviews = Review.objects.filter(title=data)
-        result = 0
-        for i in reviews:
-            result += i.score
-        try:
-            return result / len(reviews)
-        except ZeroDivisionError:
-            return None
 
 
 class TittleSerializer(serializers.ModelSerializer):

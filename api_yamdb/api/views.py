@@ -19,6 +19,7 @@ from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.tokens import default_token_generator
+from django.db.models import Avg
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework import filters, mixins, viewsets, status, permissions
@@ -130,7 +131,7 @@ class GenreViewSet(CreateListDeleteViewSet):
 
 
 class TitleViewSet(viewsets.ModelViewSet):
-    queryset = Title.objects.all()
+    queryset = Title.objects.all().annotate(rating=Avg('reviews__score')).order_by('-id')
     permission_classes = (IsAdminOrReadOnly,)
     serializer_class = ReadTittleSerializer
     filter_backends = (DjangoFilterBackend,)
