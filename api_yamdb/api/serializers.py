@@ -110,16 +110,6 @@ class ReadTittleSerializer(serializers.ModelSerializer):
             'category',
         )
 
-    def Avg(self, data):
-        reviews = Review.objects.filter(title=data)
-        result = 0
-        for i in reviews:
-            result += i.score
-        try:
-            return result / len(reviews)
-        except ZeroDivisionError:
-            return None
-
 
 class TittleSerializer(serializers.ModelSerializer):
     genre = SlugRelatedField(
