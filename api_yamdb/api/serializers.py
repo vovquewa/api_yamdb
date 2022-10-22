@@ -94,7 +94,7 @@ class CategoriesSerializer(serializers.ModelSerializer):
 class ReadTittleSerializer(serializers.ModelSerializer):
     genre = GenreSerializer(many=True)
     category = CategoriesSerializer()
-    rating = serializers.SerializerMethodField('get_rating')
+    rating = serializers.IntegerField()
 
     class Meta:
         model = Title
@@ -108,7 +108,7 @@ class ReadTittleSerializer(serializers.ModelSerializer):
             'category',
         )
 
-    def get_rating(self, data):
+    def Avg(self, data):
         reviews = Review.objects.filter(title=data)
         result = 0
         for i in reviews:
