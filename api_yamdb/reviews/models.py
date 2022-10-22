@@ -113,6 +113,7 @@ class Review(models.Model):
             MaxValueValidator(10, 'Оценка не может быть выше 10')
         ]
     ) 
+
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='reviews'
     )
