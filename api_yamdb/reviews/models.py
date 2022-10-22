@@ -14,21 +14,25 @@ class User(AbstractUser):
         (ADMIN, 'ADMIN'),
     )
     role = models.CharField(
+        verbose_name='Права доступа',
         max_length=10,
         choices=ROLE_CHOICES,
         default=USER
     )
     email = models.EmailField(
+        verbose_name='Почта',
         db_index=True,
         unique=True,
         blank=False
     )
     username = models.CharField(
+        verbose_name='Логин',
         db_index=True,
         max_length=150,
         unique=True
     )
     bio = models.TextField(
+        verbose_name='биография',
         blank=True,
         null=True
     )
